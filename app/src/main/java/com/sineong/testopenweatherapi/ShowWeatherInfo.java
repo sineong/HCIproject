@@ -1,30 +1,52 @@
 package com.sineong.testopenweatherapi;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
 
 import com.sineong.testopenweatherapi.Client.OpenWeatherAPIClient;
 import com.sineong.testopenweatherapi.Client.Weather;
 
 public class ShowWeatherInfo extends AppCompatActivity {
 
+    Calendar cal;
+    int month;
+    int day;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_weather_info);
 
+        cal = Calendar.getInstance();
+        setDate();
 
         TextView temp = (TextView)findViewById(R.id.temperature);
-
         getWeather(temp);
 
+
+    }
+    private void setDate() {
+        month = cal.get(Calendar.MONTH) + 1;
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        ((TextView) findViewById(R.id.date)).setText(month + "월 " + day + "일");
     }
 
     public void getWeather(View view) {
 
+        final Bitmap[] bitmap = new Bitmap[1];
 
         // 날씨를 읽어오는 API 호출
 
@@ -38,28 +60,63 @@ public class ShowWeatherInfo extends AppCompatActivity {
 
                 OpenWeatherAPIClient call = new OpenWeatherAPIClient();
                 final Weather w = call.getWeather(lat, lon);
-                System.out.println("Temp :" + w.getTemprature());
+                //System.out.println("Temp :" + w.getTemprature());
+                String iconURL = "http://openweathermap.org/img/w/"+String.valueOf(w.getIcon())+".png";
+
+                try {
+                    URL url = new URL(iconURL);
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap[0] = BitmapFactory.decodeStream(is);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         TextView temp = (TextView) findViewById(R.id.temperature);
-                        TextView min_temp = (TextView) findViewById(R.id.min_temp);
-                        TextView max_temp = (TextView) findViewById(R.id.max_temp);
-                        TextView windspeed = (TextView) findViewById(R.id.windspeed);
+        //                TextView min_temp = (TextView) findViewById(R.id.min_temp);
+          //              TextView max_temp = (TextView) findViewById(R.id.max_temp);
+            //            TextView windspeed = (TextView) findViewById(R.id.windspeed);
        //                 TextView description = (TextView) findViewById(R.id.description);
 
-                        String t = String.valueOf(w.getTemprature());
+                        String t = String.valueOf((int)w.getTemprature())+"℃";
                         String min_t = String.valueOf(w.getMin_temp());
                         String max_t = String.valueOf(w.getMax_temp());
                         String wind = String.valueOf(w.getWind_speed());
        //                 String desc = String.valueOf(w.getDescription());
 
+
                         temp.setText(t);
-                        min_temp.setText(min_t);
-                        max_temp.setText(max_t);
-                        windspeed.setText(wind);
+        //                min_temp.setText(min_t);
+          //              max_temp.setText(max_t);
+            //            windspeed.setText(wind);
         //                description.setText(desc);
+
+                        ImageView myIcon = (ImageView) findViewById(R.id.icon);
+                        myIcon.setImageBitmap(bitmap[0]);
+
+                        ImageView topView = (ImageView) findViewById(R.id.top);
+                        ImageView bottomView = (ImageView) findViewById(R.id.bottom);
+
+                        if(w.getTemprature() > 30)
+                        {
+                            topView.setImageResource(R.drawable.top_short);
+                            bottomView.setImageResource(R.drawable.bottom_short);
+                        }
+                        else
+                        {
+                            topView.setImageResource(R.drawable.top_long);
+                            bottomView.setImageResource(R.drawable.bottom_long);
+                        }
                     }
                 });
             }

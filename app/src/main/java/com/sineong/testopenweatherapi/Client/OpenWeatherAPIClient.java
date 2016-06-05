@@ -68,7 +68,8 @@ public class OpenWeatherAPIClient {
         w.setMax_temp(json.getJSONObject("main").getDouble("temp_max"));
         w.setCity(json.getString("name"));
         w.setWind_speed(json.getJSONObject("wind").getDouble("speed"));
-//        w.setCloudy(json.getInt("clouds"));
+//        w.setCloudy(json.getJSONObject("clouds").getInt("all"));
+        w.setIcon(json.getJSONArray("weather").getJSONObject(0).getString("icon"));
 
         return w;
     }

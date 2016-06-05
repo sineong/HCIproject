@@ -15,6 +15,7 @@ public class Weather {
     int humidity;
     int cloudy;
     String city;
+    String icon;
 
     public void setLat(double lat){ this.lat = lat;}
     public void setLon(double lon){ this.lon = lon;}
@@ -26,15 +27,17 @@ public class Weather {
     public void setHumidity(int humidity) { this.humidity = humidity;}
     public void setCloudy(int cloudy){ this.cloudy = cloudy;}
     public void setCity(String city){ this.city = city;}
+    public void setIcon(String icon){ this.icon = icon;}
 
     public double getLat(){ return lat;}
-    public double getIon() { return lon;}
+    public double getLon() { return lon;}
     public String getDescription() { return description;}
     public double getTemprature() { return temperature - 273;}
     public double getMin_temp() { return min_temp - 273;}
     public double getMax_temp() { return max_temp - 273;}
     public double getWind_speed() { return wind_speed;}
     public int getHumidity() { return humidity;}
-    public int getCloudy() { return cloudy; }
-    public String getCity() { return city; }
+    public int getCloudy() { return cloudy;}
+    public String getCity() { return city;}
+    public String getIcon() { return icon;}
 }

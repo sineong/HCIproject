@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowWeatherInfo"></activity>
+        <activity android:name=".ShowWeatherInfo" />
+        <activity android:name=".SendFeedback"></activity>
     </application>
 
 </manifest>

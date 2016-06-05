@@ -62,7 +62,7 @@ public class OpenWeatherAPIClient {
 
     private Weather parseJSON(JSONObject json) throws JSONException {
         Weather w = new Weather();
-//        w.setDescription(json.getString("description"));
+
         w.setTemprature(json.getJSONObject("main").getDouble("temp"));
         w.setMin_temp(json.getJSONObject("main").getDouble("temp_min"));
         w.setMax_temp(json.getJSONObject("main").getDouble("temp_max"));
@@ -70,6 +70,7 @@ public class OpenWeatherAPIClient {
         w.setWind_speed(json.getJSONObject("wind").getDouble("speed"));
 //        w.setCloudy(json.getJSONObject("clouds").getInt("all"));
         w.setIcon(json.getJSONArray("weather").getJSONObject(0).getString("icon"));
+        w.setDescription(json.getJSONArray("weather").getJSONObject(0).getString("description"));
 
         return w;
     }

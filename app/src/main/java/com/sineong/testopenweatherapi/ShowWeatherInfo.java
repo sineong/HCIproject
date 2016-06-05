@@ -3,6 +3,7 @@ package com.sineong.testopenweatherapi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.IntRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ public class ShowWeatherInfo extends AppCompatActivity {
     Calendar cal;
     int month;
     int day;
+    int currentTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,15 @@ public class ShowWeatherInfo extends AppCompatActivity {
         ((TextView) findViewById(R.id.date)).setText(month + "월 " + day + "일");
     }
 
+    public void feedback(View view) {
+
+        Intent intent = new Intent(this, SendFeedback.class);
+        intent.putExtra("month", month);
+        intent.putExtra("day", day);
+        intent.putExtra("temp", currentTemp);
+        startActivity(intent);
+    }
+
     public void getWeather(View view) {
 
         final Bitmap[] bitmap = new Bitmap[1];
@@ -60,6 +71,7 @@ public class ShowWeatherInfo extends AppCompatActivity {
 
                 OpenWeatherAPIClient call = new OpenWeatherAPIClient();
                 final Weather w = call.getWeather(lat, lon);
+                currentTemp = (int)w.getTemprature();
                 //System.out.println("Temp :" + w.getTemprature());
                 String iconURL = "http://openweathermap.org/img/w/"+String.valueOf(w.getIcon())+".png";
 
@@ -92,7 +104,7 @@ public class ShowWeatherInfo extends AppCompatActivity {
                         String min_t = String.valueOf(w.getMin_temp());
                         String max_t = String.valueOf(w.getMax_temp());
                         String wind = String.valueOf(w.getWind_speed());
-       //                 String desc = String.valueOf(w.getDescription());
+                        String desc = String.valueOf(w.getDescription());
 
 
                         temp.setText(t);
@@ -106,6 +118,7 @@ public class ShowWeatherInfo extends AppCompatActivity {
 
                         ImageView topView = (ImageView) findViewById(R.id.top);
                         ImageView bottomView = (ImageView) findViewById(R.id.bottom);
+                        ImageView umbrella = (ImageView) findViewById(R.id.umbrella);
 
                         if(w.getTemprature() > 30)
                         {
@@ -117,6 +130,9 @@ public class ShowWeatherInfo extends AppCompatActivity {
                             topView.setImageResource(R.drawable.top_long);
                             bottomView.setImageResource(R.drawable.bottom_long);
                         }
+
+                        if(w.getDescription().indexOf("Rain") > 0)
+                            umbrella.setImageResource(R.drawable.umbrella);
                     }
                 });
             }

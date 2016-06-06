@@ -61,9 +61,8 @@
         android:id="@+id/feedback"
         android:onClick="feedback"
         android:background="@color/button1"
-        android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/date" />
+        android:layout_marginTop="400dp"
+        android:layout_alignStart="@+id/bottom"/>
 
     <ImageView
         android:layout_width="40dp"

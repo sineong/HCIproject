@@ -1,16 +1,16 @@
 package com.sineong.testopenweatherapi;
 
 import android.content.Intent;
+import android.content.res.*;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.sineong.testopenweatherapi.DB.Criteria;
 import com.sineong.testopenweatherapi.DB.MyDBHandler;
+
+import org.w3c.dom.*;
 
 public class SendFeedback extends AppCompatActivity {
 
@@ -20,25 +20,135 @@ public class SendFeedback extends AppCompatActivity {
         setContentView(R.layout.activity_send_feedback);
 
         Intent intent = getIntent();
-        ((TextView) findViewById(R.id.date)).setText(intent.getIntExtra("month",0) + "월 " + intent.getIntExtra("day",0) + "일");
-        ((TextView) findViewById(R.id.temperature)).setText(intent.getIntExtra("temp",0)+"℃");
-        ((TextView) findViewById(R.id.daily)).setText(intent.getIntExtra("daily_max",0)+" / "+intent.getIntExtra("daily_min",0));
+
+        ((TextView) findViewById(R.id.date)).setText(intent.getIntExtra("month", 0) + "월 " + intent.getIntExtra("day", 0) + "일");
+        ((TextView) findViewById(R.id.temperature)).setText(intent.getIntExtra("temp", 0) + "℃");
+        ((TextView) findViewById(R.id.max)).setText(intent.getIntExtra("daily_max", 0) + "");
+        ((TextView) findViewById(R.id.min)).setText(intent.getIntExtra("daily_min", 0) + "");
 
         ImageView topView = (ImageView) findViewById(R.id.top);
         ImageView bottomView = (ImageView) findViewById(R.id.bottom);
 
+        ImageButton top_left_btn = (ImageButton) findViewById(R.id.top_left_btn);
+        ImageButton top_right_btn = (ImageButton) findViewById(R.id.top_right_btn);
+        ImageButton bottom_left_btn = (ImageButton) findViewById(R.id.bottom_left_btn);
+        ImageButton bottom_right_btn = (ImageButton) findViewById(R.id.bottom_right_btn);
 
-        if(intent.getIntExtra("daily_max",0) >= intent.getIntExtra("inner_max",0))
+        TextView top_flag = (TextView) findViewById(R.id.top_flag);
+        TextView bottom_flag = (TextView) findViewById(R.id.bottom_flag);
+
+        if (intent.getIntExtra("daily_max", 0) >= intent.getIntExtra("inner_max", 0)){
             topView.setImageResource(R.drawable.top_short);
-
-        else
+            top_flag.setText("short");
+        }
+        else {
             topView.setImageResource(R.drawable.top_long);
+            top_flag.setText("long");
+        }
 
-        if(intent.getIntExtra("daily_max",0) >= intent.getIntExtra("bottom_max",0))
+        if(intent.getIntExtra("daily_max",0) >= intent.getIntExtra("bottom_max",0)) {
             bottomView.setImageResource(R.drawable.bottom_short);
-        else
+            bottom_flag.setText("short");
+        }
+        else {
             bottomView.setImageResource(R.drawable.bottom_long);
+            bottom_flag.setText("long");
+        }
 
+        if (top_flag.getText().toString() == "short"){
+            top_right_btn.setVisibility(View.VISIBLE);
+        }
+        else{
+            top_left_btn.setVisibility(View.VISIBLE);
+        }
+
+        if (bottom_flag.getText().toString() == "short"){
+            bottom_right_btn.setVisibility(View.VISIBLE);
+        }
+        else{
+            bottom_left_btn.setVisibility(View.VISIBLE);
+        }
+
+
+
+    }
+
+    public void topRightButton(View view){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView topView = (ImageView) findViewById(R.id.top);
+
+                ImageButton top_left_btn = (ImageButton) findViewById(R.id.top_left_btn);
+                ImageButton top_right_btn = (ImageButton) findViewById(R.id.top_right_btn);
+
+                TextView top_flag = (TextView) findViewById(R.id.top_flag);
+
+                top_right_btn.setVisibility(View.INVISIBLE);
+                top_left_btn.setVisibility(View.VISIBLE);
+
+                topView.setImageResource(R.drawable.top_long);
+                top_flag.setText("long");
+            }
+        });
+    }
+
+    public void topLeftButton(View view){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView topView = (ImageView) findViewById(R.id.top);
+
+                ImageButton top_left_btn = (ImageButton) findViewById(R.id.top_left_btn);
+                ImageButton top_right_btn = (ImageButton) findViewById(R.id.top_right_btn);
+
+                TextView top_flag = (TextView) findViewById(R.id.top_flag);
+
+                top_right_btn.setVisibility(View.VISIBLE);
+                top_left_btn.setVisibility(View.INVISIBLE);
+
+                topView.setImageResource(R.drawable.top_short);
+                top_flag.setText("short");
+            }
+        });
+    }
+    public void bottomRightButton(View view){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView bottomView = (ImageView) findViewById(R.id.bottom);
+
+                ImageButton bottom_left_btn = (ImageButton) findViewById(R.id.bottom_left_btn);
+                ImageButton bottom_right_btn = (ImageButton) findViewById(R.id.bottom_right_btn);
+
+                TextView bottom_flag = (TextView) findViewById(R.id.bottom_flag);
+
+                bottom_right_btn.setVisibility(View.INVISIBLE);
+                bottom_left_btn.setVisibility(View.VISIBLE);
+
+                bottomView.setImageResource(R.drawable.bottom_long);
+                bottom_flag.setText("long");
+            }
+        });
+    }
+    public void bottomLeftButton(View view){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView bottomView = (ImageView) findViewById(R.id.bottom);
+
+                ImageButton bottom_left_btn = (ImageButton) findViewById(R.id.bottom_left_btn);
+                ImageButton bottom_right_btn = (ImageButton) findViewById(R.id.bottom_right_btn);
+
+                TextView bottom_flag = (TextView) findViewById(R.id.bottom_flag);
+
+                bottom_left_btn.setVisibility(View.INVISIBLE);
+                bottom_right_btn.setVisibility(View.VISIBLE);
+
+                bottomView.setImageResource(R.drawable.bottom_short);
+                bottom_flag.setText("short");
+            }
+        });
     }
 
     public void sendFeedback(View view) {
@@ -46,27 +156,31 @@ public class SendFeedback extends AppCompatActivity {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
         Criteria new_criteria = new Criteria();
         Criteria old_criteria = dbHandler.findLatestCriteria();
-        int new_inner_max = old_criteria.getInner_max();
-        int new_bottom_max = old_criteria.getBottom_max();
 
-        CheckBox top_cold = (CheckBox) findViewById(R.id.top_cold);
-        CheckBox bottom_cold = (CheckBox) findViewById(R.id.bottom_cold);
-        CheckBox top_hot = (CheckBox) findViewById(R.id.top_hot);
-        CheckBox bottom_hot = (CheckBox) findViewById(R.id.bottom_hot);
+        int my_inner_max = old_criteria.getInner_max();
+        int my_bottom_max = old_criteria.getBottom_max();
 
-        if(top_cold.isChecked())
-            new_inner_max += 2;
-        if(bottom_cold.isChecked())
-            new_bottom_max += 2;
-        if(top_hot.isChecked())
-            new_inner_max -= 2;
-        if(bottom_hot.isChecked())
-            new_bottom_max -= 2;
+        TextView max = (TextView) findViewById(R.id.max);
 
-        new_criteria.setInner_max(new_inner_max);
-        new_criteria.setBottom_max(new_bottom_max);
-        new_criteria.setOuter_min1(old_criteria.getOuter_min1());
-        new_criteria.setOuter_min2(old_criteria.getOuter_min2());
+        int daily_max = Integer.parseInt(max.getText().toString());
+
+
+        String top_flag = ((TextView) findViewById(R.id.top_flag)).getText().toString();
+        String bottom_flag = ((TextView) findViewById(R.id.bottom_flag)).getText().toString();
+
+        if (((daily_max > my_inner_max) && (top_flag == "long"))
+                || ((daily_max <= my_inner_max) && (top_flag == "short"))){
+            my_inner_max = daily_max;
+        }
+
+
+        if (((daily_max > my_bottom_max) && (bottom_flag == "long"))
+                || ((daily_max <= my_bottom_max) && (bottom_flag == "short"))){
+            my_bottom_max = daily_max;
+        }
+
+        new_criteria.setInner_max(my_inner_max);
+        new_criteria.setBottom_max(my_bottom_max);
 
         dbHandler.addCriteria(new_criteria);
 

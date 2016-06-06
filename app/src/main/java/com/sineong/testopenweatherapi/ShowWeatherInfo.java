@@ -160,13 +160,13 @@ public class ShowWeatherInfo extends AppCompatActivity {
 
                         getCriteria(umbrella);
 
-                        if ((w.getMax_temp()-273) >= inner_max)
+                        if ((int)(w.getMax_temp()-273) > inner_max)
                             topView.setImageResource(R.drawable.top_short);
 
                         else
                             topView.setImageResource(R.drawable.top_long);
 
-                        if ((w.getMax_temp()-273) >= bottom_max)
+                        if ((int)(w.getMax_temp()-273) > bottom_max)
                             bottomView.setImageResource(R.drawable.bottom_short);
                         else
                             bottomView.setImageResource(R.drawable.bottom_long);

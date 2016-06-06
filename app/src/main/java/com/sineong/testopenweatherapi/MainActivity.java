@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         latitudeField = (TextView) findViewById(R.id.Latitude);
         longitudeField = (TextView) findViewById(R.id.Longitute);
@@ -136,6 +134,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
+
+        Intent intent = new Intent(this, ShowWeatherInfo.class);
+        intent.putExtra("LATITUDE", latitude);
+        intent.putExtra("LONGITUDE", longitude);
+
+        startActivity(intent);
     }
 
 
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             longitude = location.getLongitude();
 
             latitudeField.setText("Latitude: "
-                    +String.valueOf(location.getLatitude()));
+                    + String.valueOf(location.getLatitude()));
             longitudeField.setText("Longitude: "
                     + String.valueOf(location.getLongitude()));
 
@@ -200,15 +204,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    public void getWeather(View view) {
-
-        Intent intent = new Intent(this, ShowWeatherInfo.class);
-        intent.putExtra("LATITUDE", latitude);
-        intent.putExtra("LONGITUDE", longitude);
-
-        startActivity(intent);
-
-    }
-
 }

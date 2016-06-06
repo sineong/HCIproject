@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:text="Send"
         android:id="@+id/send"
+        android:onClick="sendFeedback"
         android:background="@color/button2"
         android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
@@ -93,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="더웠어요"
-        android:id="@+id/checkBox"
+        android:id="@+id/bottom_hot"
         android:layout_alignTop="@+id/bottom_cold"
         android:layout_toStartOf="@+id/send" />
 

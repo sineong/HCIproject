@@ -72,5 +72,22 @@
         android:layout_centerVertical="true"
         android:layout_alignEnd="@+id/top" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="test"
+        android:id="@+id/dbtest"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/date" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Is raining?"
+        android:id="@+id/isRaining"
+        android:layout_alignBottom="@+id/bottom"
+        android:layout_alignStart="@+id/umbrella" />
+
 
 </RelativeLayout>

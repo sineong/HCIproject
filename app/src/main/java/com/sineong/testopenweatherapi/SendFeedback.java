@@ -3,8 +3,14 @@ package com.sineong.testopenweatherapi;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.sineong.testopenweatherapi.DB.Criteria;
+import com.sineong.testopenweatherapi.DB.MyDBHandler;
 
 public class SendFeedback extends AppCompatActivity {
 
@@ -21,15 +27,50 @@ public class SendFeedback extends AppCompatActivity {
         ImageView bottomView = (ImageView) findViewById(R.id.bottom);
 
 
-        if(intent.getIntExtra("temp",0) > 30)
-        {
+        if(intent.getIntExtra("temp",0) >= intent.getIntExtra("inner_max",0))
             topView.setImageResource(R.drawable.top_short);
-            bottomView.setImageResource(R.drawable.bottom_short);
-        }
+
         else
-        {
             topView.setImageResource(R.drawable.top_long);
+
+        if(intent.getIntExtra("temp",0) >= intent.getIntExtra("bottom_max",0))
+            bottomView.setImageResource(R.drawable.bottom_short);
+        else
             bottomView.setImageResource(R.drawable.bottom_long);
-        }
+
+    }
+
+    public void sendFeedback(View view) {
+
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        Criteria new_criteria = new Criteria();
+        Criteria old_criteria = dbHandler.findLatestCriteria();
+        int new_inner_max = old_criteria.getInner_max();
+        int new_bottom_max = old_criteria.getBottom_max();
+
+        CheckBox top_cold = (CheckBox) findViewById(R.id.top_cold);
+        CheckBox bottom_cold = (CheckBox) findViewById(R.id.bottom_cold);
+        CheckBox top_hot = (CheckBox) findViewById(R.id.top_hot);
+        CheckBox bottom_hot = (CheckBox) findViewById(R.id.bottom_hot);
+
+        if(top_cold.isChecked())
+            new_inner_max += 2;
+        if(bottom_cold.isChecked())
+            new_bottom_max += 2;
+        if(top_hot.isChecked())
+            new_inner_max -= 2;
+        if(bottom_hot.isChecked())
+            new_bottom_max -= 2;
+
+        new_criteria.setInner_max(new_inner_max);
+        new_criteria.setBottom_max(new_bottom_max);
+        new_criteria.setOuter_min1(old_criteria.getOuter_min1());
+        new_criteria.setOuter_min2(old_criteria.getOuter_min2());
+
+        dbHandler.addCriteria(new_criteria);
+
+        Intent intent = new Intent(this, ShowWeatherInfo.class);
+        startActivity(intent);
+
     }
 }

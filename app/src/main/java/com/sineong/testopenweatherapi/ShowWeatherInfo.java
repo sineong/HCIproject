@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.IntRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,8 +29,11 @@ public class ShowWeatherInfo extends AppCompatActivity {
     int month;
     int day;
     int currentTemp;
+    int daily_max;
+    int daily_min;
     int inner_max;
     int bottom_max;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +68,20 @@ public class ShowWeatherInfo extends AppCompatActivity {
 
     public void feedback(View view) {
 
+        Intent oldintent = getIntent();
+        double lat = oldintent.getDoubleExtra("LATITUDE", 0);
+        double lon = oldintent.getDoubleExtra("LONGITUDE", 0);
+
         Intent intent = new Intent(this, SendFeedback.class);
         intent.putExtra("month", month);
         intent.putExtra("day", day);
         intent.putExtra("temp", currentTemp);
         intent.putExtra("inner_max", inner_max);
         intent.putExtra("bottom_max", bottom_max);
+        intent.putExtra("daily_min", daily_min);
+        intent.putExtra("daily_max", daily_max);
+        intent.putExtra("LATITUDE", lat);
+        intent.putExtra("LONGITUDE", lon);
         startActivity(intent);
     }
 
@@ -91,6 +103,8 @@ public class ShowWeatherInfo extends AppCompatActivity {
                 OpenWeatherAPIClient call = new OpenWeatherAPIClient();
                 final Weather w = call.getWeather(lat, lon);
                 currentTemp = (int)w.getTemprature();
+                daily_max = (int)w.getMax_temp()-273;
+                daily_min = (int)w.getMin_temp()-273;
                 //System.out.println("Temp :" + w.getTemprature());
                 String iconURL = "http://openweathermap.org/img/w/"+String.valueOf(w.getIcon())+".png";
 
@@ -120,13 +134,15 @@ public class ShowWeatherInfo extends AppCompatActivity {
                         //                 TextView description = (TextView) findViewById(R.id.description);
 
                         String t = String.valueOf((int) w.getTemprature()) + "℃";
-                        String min_t = String.valueOf(w.getMin_temp());
-                        String max_t = String.valueOf(w.getMax_temp());
+                        String min_t = String.valueOf(daily_min);
+                        String max_t = String.valueOf(daily_max);
                         String wind = String.valueOf(w.getWind_speed());
                         String desc = String.valueOf(w.getDescription());
 
 
                         temp.setText(t);
+                        TextView daily = (TextView) findViewById(R.id.daily);
+                        daily.setText(max_t+" / "+min_t);
                         //                min_temp.setText(min_t);
                         //              max_temp.setText(max_t);
                         //            windspeed.setText(wind);
@@ -141,15 +157,16 @@ public class ShowWeatherInfo extends AppCompatActivity {
                         TextView isRaing = (TextView) findViewById(R.id.isRaining);
                         isRaing.setText(w.getDescription());
 
+
                         getCriteria(umbrella);
 
-                        if (w.getTemprature() >= inner_max)
+                        if ((w.getMax_temp()-273) >= inner_max)
                             topView.setImageResource(R.drawable.top_short);
 
                         else
                             topView.setImageResource(R.drawable.top_long);
 
-                        if (w.getTemprature() >= bottom_max)
+                        if ((w.getMax_temp()-273) >= bottom_max)
                             bottomView.setImageResource(R.drawable.bottom_short);
                         else
                             bottomView.setImageResource(R.drawable.bottom_long);

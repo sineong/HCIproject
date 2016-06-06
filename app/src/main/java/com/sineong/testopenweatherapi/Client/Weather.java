@@ -33,8 +33,8 @@ public class Weather {
     public double getLon() { return lon;}
     public String getDescription() { return description;}
     public double getTemprature() { return temperature - 273;}
-    public double getMin_temp() { return min_temp - 273;}
-    public double getMax_temp() { return max_temp - 273;}
+    public double getMin_temp() { return min_temp;}
+    public double getMax_temp() { return max_temp;}
     public double getWind_speed() { return wind_speed;}
     public int getHumidity() { return humidity;}
     public int getCloudy() { return cloudy;}

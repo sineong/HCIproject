@@ -22,18 +22,19 @@ public class SendFeedback extends AppCompatActivity {
         Intent intent = getIntent();
         ((TextView) findViewById(R.id.date)).setText(intent.getIntExtra("month",0) + "월 " + intent.getIntExtra("day",0) + "일");
         ((TextView) findViewById(R.id.temperature)).setText(intent.getIntExtra("temp",0)+"℃");
+        ((TextView) findViewById(R.id.daily)).setText(intent.getIntExtra("daily_max",0)+" / "+intent.getIntExtra("daily_min",0));
 
         ImageView topView = (ImageView) findViewById(R.id.top);
         ImageView bottomView = (ImageView) findViewById(R.id.bottom);
 
 
-        if(intent.getIntExtra("temp",0) >= intent.getIntExtra("inner_max",0))
+        if(intent.getIntExtra("daily_max",0) >= intent.getIntExtra("inner_max",0))
             topView.setImageResource(R.drawable.top_short);
 
         else
             topView.setImageResource(R.drawable.top_long);
 
-        if(intent.getIntExtra("temp",0) >= intent.getIntExtra("bottom_max",0))
+        if(intent.getIntExtra("daily_max",0) >= intent.getIntExtra("bottom_max",0))
             bottomView.setImageResource(R.drawable.bottom_short);
         else
             bottomView.setImageResource(R.drawable.bottom_long);
@@ -69,8 +70,20 @@ public class SendFeedback extends AppCompatActivity {
 
         dbHandler.addCriteria(new_criteria);
 
+        Intent oldintent = getIntent();
+        double lat = oldintent.getDoubleExtra("LATITUDE", 0);
+        double lon = oldintent.getDoubleExtra("LONGITUDE", 0);
+
         Intent intent = new Intent(this, ShowWeatherInfo.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("LATITUDE", lat);
+        intent.putExtra("LONGITUDE", lon);
         startActivity(intent);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -89,5 +89,14 @@
         android:layout_alignBottom="@+id/bottom"
         android:layout_alignStart="@+id/umbrella" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="max / min"
+        android:id="@+id/daily"
+        android:layout_alignTop="@+id/icon"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

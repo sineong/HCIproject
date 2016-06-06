@@ -21,10 +21,13 @@ import java.net.URL;
 public class OpenWeatherAPIClient {
 
     final static String openWeatherURL = "http://api.openweathermap.org/data/2.5/weather";
+    final static String openWeatherURL2 = "http://api.openweathermap.org/data/2.5/forecast/daily";
 
     public Weather getWeather(double lat,double lon) {
         Weather w;
+        Weather w2;
         String urlString = openWeatherURL + "?lat=" + lat + "&lon=" + lon + "&APPID=f5e8344b7c3fc41944364becab4cb7fe";
+        String urlString2 = openWeatherURL2 + "?lat=" + lat + "&lon=" + lon + "&APPID=f5e8344b7c3fc41944364becab4cb7fe";
 
         try {
             // call API by using HTTPURLConnection
@@ -38,6 +41,18 @@ public class OpenWeatherAPIClient {
             w = parseJSON(json);
             w.setLon(lon);
             w.setLat(lat);
+
+            // call API by using HTTPURLConnection //daily forecast
+            URL url2 = new URL(urlString2);
+            HttpURLConnection urlConnection2 = (HttpURLConnection) url2.openConnection();
+
+            InputStream in2 = new BufferedInputStream(urlConnection2.getInputStream());
+            JSONObject json2 = new JSONObject(getStringFromInputStream(in2));
+
+            // parse JSON
+            w2 = parseJSON2(json2);
+            w2.setLon(lon);
+            w2.setLat(lat);
 
 
         }catch(MalformedURLException e){
@@ -56,7 +71,8 @@ public class OpenWeatherAPIClient {
         }
 
         // set Weather Object
-
+        w.setMin_temp(w2.getMin_temp());
+        w.setMax_temp(w2.getMax_temp());
         return w;
     }
 
@@ -71,6 +87,15 @@ public class OpenWeatherAPIClient {
 //        w.setCloudy(json.getJSONObject("clouds").getInt("all"));
         w.setIcon(json.getJSONArray("weather").getJSONObject(0).getString("icon"));
         w.setDescription(json.getJSONArray("weather").getJSONObject(0).getString("description"));
+
+        return w;
+    }
+
+    private Weather parseJSON2(JSONObject json) throws JSONException {
+        Weather w = new Weather();
+
+        w.setMin_temp(json.getJSONArray("list").getJSONObject(0).getJSONObject("temp").getDouble("min"));
+        w.setMax_temp(json.getJSONArray("list").getJSONObject(0).getJSONObject("temp").getDouble("max"));
 
         return w;
     }

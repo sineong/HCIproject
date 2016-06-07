@@ -168,16 +168,19 @@ public class SendFeedback extends AppCompatActivity {
         String top_flag = ((TextView) findViewById(R.id.top_flag)).getText().toString();
         String bottom_flag = ((TextView) findViewById(R.id.bottom_flag)).getText().toString();
 
-        if (((daily_max > my_inner_max) && (top_flag == "long"))
-                || ((daily_max <= my_inner_max) && (top_flag == "short"))){
+        if ((daily_max > my_inner_max) && (top_flag == "long"))
             my_inner_max = daily_max;
-        }
+
+        else if ((daily_max <= my_inner_max) && (top_flag == "short"))
+            my_inner_max = daily_max - 1;
 
 
-        if (((daily_max > my_bottom_max) && (bottom_flag == "long"))
-                || ((daily_max <= my_bottom_max) && (bottom_flag == "short"))){
+
+        if ((daily_max > my_bottom_max) && (bottom_flag == "long"))
             my_bottom_max = daily_max;
-        }
+        else if ((daily_max <= my_bottom_max) && (bottom_flag == "short"))
+            my_bottom_max = daily_max - 1;
+
 
         new_criteria.setInner_max(my_inner_max);
         new_criteria.setBottom_max(my_bottom_max);

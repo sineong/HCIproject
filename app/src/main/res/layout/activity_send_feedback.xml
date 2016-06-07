@@ -130,7 +130,9 @@
         android:layout_alignBottom="@+id/top"
         android:layout_toEndOf="@+id/bottom"
         android:visibility="invisible"
-        android:onClick="topRightButton"/>
+        android:onClick="topRightButton"
+        android:background="@android:color/transparent"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -140,7 +142,9 @@
         android:layout_alignBottom="@+id/bottom_left_btn"
         android:layout_toEndOf="@+id/bottom"
         android:visibility="invisible"
-        android:onClick="bottomRightButton"/>
+        android:onClick="bottomRightButton"
+        android:background="@android:color/transparent"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -150,7 +154,9 @@
         android:layout_above="@+id/bottom"
         android:layout_alignStart="@+id/top"
         android:visibility="invisible"
-        android:onClick="topLeftButton"/>
+        android:onClick="topLeftButton"
+        android:background="@android:color/transparent"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -160,7 +166,9 @@
         android:layout_centerVertical="true"
         android:layout_alignStart="@+id/top_left_btn"
         android:visibility="invisible"
-        android:onClick="bottomLeftButton"/>
+        android:onClick="bottomLeftButton"
+        android:background="@android:color/transparent"
+        />
 
     <TextView
         android:layout_width="wrap_content"
